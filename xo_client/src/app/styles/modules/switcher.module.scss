@@ -1,0 +1,35 @@
+
+$background_color: #171717;
+$foreground_color: rgba(255, 255, 255, 0.7);
+
+.icon-wrapper{
+    display: inline-block;
+    padding: 8px;
+    margin: 4px;
+    border-radius: 32px;
+    transition: 0.3s;
+    box-shadow: 0 0 4px 1px rgba(0, 222, 222, 0.25);
+
+    &:hover{
+        background-color: #999999;
+    }
+
+    &:active{
+        background-color: #cdd99e;
+        box-shadow: 0 0 4px 1px #c23a6c;
+    }
+
+}
+
+.icon-container{
+    display: inline-block;
+    margin: 4px;
+    .light{
+        background-color: rgba(255, 255, 255, 0.8);
+
+    }
+
+    .dark{
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+}
