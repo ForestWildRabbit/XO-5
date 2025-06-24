@@ -1,0 +1,21 @@
+@use "./modules/switcher.module.scss";
+@use "../../../node_modules/tailwindcss";
+
+$background_color: #171717;
+$foreground_color: rgba(255, 255, 255, 0.7);
+
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background: $background_color;
+  color: $foreground_color;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+}
+
+
