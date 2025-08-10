@@ -1,5 +1,4 @@
 from fastapi import FastAPI, APIRouter
-
 from app.game.routers import game_router
 
 app = FastAPI(root_path="/api")

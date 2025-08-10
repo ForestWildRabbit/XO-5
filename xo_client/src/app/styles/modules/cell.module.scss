@@ -1,0 +1,66 @@
+@mixin cell_mixin($current: false, $winning: false){
+    @if ($current and $winning){
+        color: #00AA55;
+        box-shadow: 0 0 5px 1px rgba(0, 222, 222, 0.75);
+    }
+    @else if ($current){
+        color: #00AA55;
+    }
+    @else if($winning){
+        color: #DDDD00;
+        box-shadow: 0 0 5px 1px rgba(0, 222, 222, 0.75);
+    }
+
+    font-size: 16px;
+    background-color: rgba(34, 214, 139, 0.25);
+    margin: 8px;
+
+    width: fit-content;
+    height: fit-content;
+
+    min-width: 40px;
+    min-height: 40px;
+
+    max-width: 44px;
+    max-height: 44px;
+
+    display: flex;
+    align-items:center;
+    justify-content:center;
+
+    transition: 0.2s;
+
+    &:hover{
+        box-shadow: 0 0 5px 1px rgba(218, 78, 78, 0.75);
+    }
+}
+
+.cell{
+    @include cell_mixin();
+}
+
+.cell_current{
+    @include cell_mixin($current: true);
+}
+
+.cell_winning{
+    @include cell_mixin($winning: true);
+}
+
+.cell_current_and_winning{
+    @include cell_mixin($current: true, $winning: true);
+}
+
+.cell_row{
+    display: flex;
+    flex-direction: row;
+}
+
+.field{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 4px;
+    margin-top: 12px;
+    padding: 8px;
+}
