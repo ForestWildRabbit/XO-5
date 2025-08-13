@@ -3,11 +3,6 @@ import {CellType, CellValue} from "@/app/store/FieldStore";
 export const rows_count: number = 18;
 export const cols_count: number = 18;
 
-type WinCellType = {
-    row: number,
-    col: number,
-    value: string,
-}
 
 export const generateEmptyField = (rows: number, cols: number): Array<Array<CellValue>> => {
     const matrix: Array<Array<CellValue>> = [];
@@ -91,7 +86,6 @@ export const isWinningDiags = (matrix: Array<Array<CellValue>>,
         const total_diff = start_diff + end_diff;
         let counter = 0;
         for (let i = 0; i <= total_diff; i++){
-            console.log(row, col, start_diff, i);
             const elem = matrix[row - start_diff + i][col - start_diff + i]
             if (elem === value){
                 counter++;
@@ -156,29 +150,29 @@ export const isWinningDiags = (matrix: Array<Array<CellValue>>,
 export const isWinningMatrix = (matrix: Array<Array<CellValue>>,
                                 row: number, col: number, value: CellValue): CellType[] | false => {
     let result;
-    console.log('checking for winning matrix')
     result = isWinningLines(matrix, row, col, value);
     if (result){
-        console.log(result);
         return result;
     }
     result = isWinningDiags(matrix, row, col, value);
     if (result){
-        console.log(result)
         return result;
     }
     return false;
 }
 
-export const isInWinSequence = (win_sequence: WinCellType[], row: number, col: number): boolean => {
+export const isInWinningSequence = (win_sequence: CellType[], row: number, col: number): boolean => {
     for (const win_cell of win_sequence){
-        if (win_cell.row === row && win_cell.col === col){
+        if (win_cell[0] === row && win_cell[1] === col){
             return true;
         }
     }
     return false;
 }
 
-export const isLastMoveCell = (last_move: CellType, row: number, col: number) => {
+export const isLastMoveCell = (last_move: CellType | null, row: number, col: number): boolean => {
+    if (last_move === null){
+        return false;
+    }
     return last_move[0] === row && last_move[1] === col;
 }

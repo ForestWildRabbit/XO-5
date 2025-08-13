@@ -1,9 +1,11 @@
 "use client";
 
 import {CellValue, FieldStatus, useFieldStore} from "@/app/store/FieldStore";
-import cell_styles from '../styles/modules/cell.module.scss';
-import {useState} from "react";
-import {isWinningMatrix} from "@/app/utils/field";
+import cell_styles from '@/app/styles/modules/cell.module.scss';
+import {useEffect, useState} from "react";
+import {isInWinningSequence, isLastMoveCell} from "@/app/utils/field";
+import {useSocketStore} from "@/app/store/SocketStore";
+import {send_move} from "@/app/utils/requests";
 
 type CellPropTypes = {
     row_number: number,
@@ -11,38 +13,50 @@ type CellPropTypes = {
 }
 
 const Cell = ({row_number, col_number}: CellPropTypes) => {
-    const [cell_style, ] = useState<string>(cell_styles.cell);
+    const [cellStyle, updateCellStyle] = useState<string>(cell_styles.cell);
 
     const field = useFieldStore(state => state.field);
     const move_number = useFieldStore(state => state.move_number);
     const fieldStatus = useFieldStore(state => state.status);
+    const winning_sequence = useFieldStore(state => state.winning_sequence);
+    const last_move = useFieldStore(state => state.last_move);
+    const websocket = useSocketStore(state => state.socket);
 
     const updateCell = useFieldStore(state => state.updateCell);
-    const updateStatus = useFieldStore(state => state.updateStatus);
-    const updateWinningSequence = useFieldStore(state => state.updateWinningSequence);
+
+
+    useEffect(() => {
+        if (isInWinningSequence(winning_sequence, row_number, col_number)){
+            if (isLastMoveCell(last_move, row_number, col_number)){
+                updateCellStyle(cell_styles.cell_current_and_winning);
+            } else {
+                updateCellStyle(cell_styles.cell_winning);
+            }
+        } else {
+            if (isLastMoveCell(last_move, row_number, col_number)){
+                updateCellStyle(cell_styles.cell_current);
+            } else {
+                updateCellStyle(cell_styles.cell);
+            }
+        }
+
+    }, [last_move, winning_sequence, row_number, col_number])
 
     const handleOnClickCell = () => {
         if (field[row_number][col_number] === CellValue.empty && fieldStatus === FieldStatus.started){
-            let val;
+            let val: CellValue;
             if (move_number % 2 === 0){
                 val = CellValue.x;
             } else {
                 val = CellValue.o;
             }
             updateCell(row_number, col_number, val);
-
-            const win_sequence = isWinningMatrix(field, row_number, col_number, val);
-            if (win_sequence){
-                updateStatus(FieldStatus.finished);
-                updateWinningSequence(win_sequence);
-            }
-
-            console.log(row_number, col_number);
+            send_move(websocket, [row_number, col_number, val]);
         }
     }
 
     return (
-        <div onClick={handleOnClickCell} className={cell_style}>
+        <div onClick={handleOnClickCell} className={cellStyle}>
             {field[row_number][col_number]}
         </div>
     );

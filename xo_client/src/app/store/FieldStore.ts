@@ -1,5 +1,5 @@
 import {create} from "zustand";
-import {cols_count, rows_count, generateEmptyField} from "@/app/utils/field";
+import {cols_count, rows_count, generateEmptyField, isWinningMatrix} from "@/app/utils/field";
 
 
 export enum FieldStatus{
@@ -22,8 +22,10 @@ type FieldStore = {
     cols: Readonly<number>,
     status: FieldStatus,
     move_number: number,
-    winning_sequence: Array<CellType>
+    winning_sequence: Array<CellType>,
+    last_move: CellType | null,
 
+    updateLastMove: (move: CellType) => void,
     updateStatus: (status: FieldStatus) => void,
     updateCell: (row: number, col: number, val: CellValue) => void,
     updateWinningSequence: (sequence: Array<CellType>) => void,
@@ -37,14 +39,27 @@ export const useFieldStore = create<FieldStore>()(set => ({
     status: FieldStatus.started,
     move_number: 0,
     winning_sequence: [],
+    last_move: null,
 
     updateCell: (row: number, col: number, val: CellValue) => set(state => {
         state.increaseMoveNumber();
+        state.updateLastMove([row, col, val]);
 
         const field = [...state.field];
         field[row][col] = val;
+
+        const win_sequence = isWinningMatrix(field, row, col, val);
+        if (win_sequence){
+            state.updateStatus(FieldStatus.finished);
+            state.updateWinningSequence(win_sequence);
+        }
+
         return {field: field};
     }),
+
+    updateLastMove: (move: CellType) => set(() => ({
+        last_move: move
+    })),
 
     updateWinningSequence: (sequence: CellType[]) => set(() => ({
         winning_sequence: sequence

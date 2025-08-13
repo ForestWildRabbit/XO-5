@@ -2,7 +2,16 @@
 $background_color: #171717;
 $foreground_color: rgba(255, 255, 255, 0.7);
 
-.icon-wrapper{
+@mixin icon_wrapper_mixin($theme: 'dark'){
+
+    @if ($theme == 'light'){
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    @if ($theme == 'dark'){
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
     display: inline-block;
     padding: 8px;
     margin: 4px;
@@ -11,25 +20,27 @@ $foreground_color: rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 4px 1px rgba(0, 222, 222, 0.25);
 
     &:hover{
-        background-color: #999999;
+        background-color: #efa8f0;
+        cursor: pointer;
     }
 
     &:active{
         background-color: #cdd99e;
         box-shadow: 0 0 4px 1px #c23a6c;
     }
-
 }
 
-.icon-container{
+.icon_wrapper_light{
+    @include icon_wrapper_mixin($theme: 'light')
+}
+
+.icon_wrapper_dark{
+    @include icon_wrapper_mixin($theme: 'dark')
+}
+
+.icon_container{
     display: inline-block;
     margin: 4px;
-    .light{
-        background-color: rgba(255, 255, 255, 0.8);
-
-    }
-
-    .dark{
-        background-color: rgba(255, 255, 255, 0.2);
-    }
 }
+
+

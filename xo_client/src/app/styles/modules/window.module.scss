@@ -1,0 +1,52 @@
+@mixin modal_mixin($active: false){
+    @if ($active){
+        opacity: 1;
+    }
+    @else {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+}
+
+
+@mixin model_content_mixin($active: false){
+    @if ($active){
+        transform: scale(1);
+    }
+    @else{
+        transform: scale(0.5);
+    }
+
+    padding: 20px;
+    border-radius: 12px;
+    background-color: rgba(84, 0, 133, 1);
+    min-height: 20vh;
+    min-width: 20vw;
+    transition: 0.3s;
+}
+.modal_window_active{
+    @include modal_mixin($active: true);
+}
+
+.modal_window_off{
+    @include modal_mixin($active: false);
+}
+
+.modal_content_active{
+    @include model_content_mixin($active: true);
+}
+
+.model_content_off{
+    @include model_content_mixin($active: false);
+}
