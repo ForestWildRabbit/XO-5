@@ -1,31 +1,32 @@
 import {Theme, useThemeStore} from "@/app/store/ThemeStore";
-import axios from "axios";
+import switcher_styles from "@/app/styles/modules/switcher.module.scss";
+import Image from "next/image";
+import {useEffect, useState} from "react";
 
 const ThemeSwitcher = () => {
     const theme = useThemeStore(state => state.theme);
     const updateTheme = useThemeStore(state => state.updateTheme);
 
-    const temp = async () => {
-        try {
-            const response = await axios.get('https://localhost/api/game/');
-            console.log(response);
-        } catch (e) {
-            console.error('Error fetching data:', e);
+    const [style, setStyle] = useState<string>(switcher_styles.icon_wrapper_dark);
+
+    useEffect(() => {
+        if (theme === Theme.light){
+            setStyle(switcher_styles.icon_wrapper_light);
         }
-    }
+        if (theme === Theme.dark){
+            setStyle(switcher_styles.icon_wrapper_dark);
+        }
+    }, [theme])
 
     return (
-        <div className={"icon-container"}>
-            <div className={`icon-wrapper ${theme}`} id={"sun_outline_wrapper"}
+        <div className={switcher_styles.icon_container}>
+            <div className={style} id={"sun_outline_wrapper"}
                  onClick={() => updateTheme(Theme.light)}>
-                <img src="/theme_icons/sun_outline.png" alt="Sun" width={"32"} height={"32"}/>
+                <Image src="/theme_icons/sun_outline.png" alt="Sun" width={"32"} height={"32"}/>
             </div>
-            <div className={`icon-wrapper ${theme}`} id={"moon_outline_wrapper"}
+            <div className={style} id={"moon_outline_wrapper"}
                  onClick={() => updateTheme(Theme.dark)}>
-                <img src="/theme_icons/moon_outline.png" alt="Moon" width={"32"} height={"32"}/>
-            </div>
-            <div onClick={temp}>
-                Click me
+                <Image src="/theme_icons/moon_outline.png" alt="Moon" width={"32"} height={"32"}/>
             </div>
         </div>
     );

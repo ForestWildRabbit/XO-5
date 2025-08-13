@@ -1,5 +1,5 @@
-@use "./modules/switcher.module.scss";
-@use "./modules/cell.module.scss";
+@use "modules/switcher.module";
+@use "modules/cell.module";
 @use "../../../node_modules/tailwindcss";
 
 $background_color: #171717;

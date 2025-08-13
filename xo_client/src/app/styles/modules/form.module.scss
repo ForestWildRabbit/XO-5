@@ -1,0 +1,53 @@
+$input_border_color: rgba(255, 255, 255, 0.8);
+$error_color: rgba(219, 18, 18, 1);
+$success_color: rgba(18, 219, 112, 1);
+
+@mixin message_mixin($error: false, $success: false){
+    @if ($error){
+        color: $error_color;
+    }
+    @if ($success){
+        color: $success_color;
+    }
+    text-align: center;
+    font-weight: bold;
+    min-height: 24px;
+    text-shadow: 0 0 1px black;
+    max-width: 360px;
+}
+
+.create_game_input{
+    text-indent: 4px;
+    width: 360px;
+    height: 36px;
+    border: 2px solid $input_border_color;
+    border-radius: 2px;
+    margin-top: 8px;
+    padding: 4px;
+}
+
+.create_game_submit{
+    font-size: 20px;
+    width: 360px;
+    height: 40px;
+    margin-top: 8px;
+    padding: 4px;
+    border-radius: 2px;
+    background-color: #00AA55;
+
+    &:hover{
+        color: #DDDD00;
+        cursor: pointer;
+    }
+    &:active{
+        color: #b048ac;
+    }
+}
+
+.form_error{
+    @include message_mixin($error: true);
+}
+
+.form_success{
+    @include message_mixin($success: true);
+}

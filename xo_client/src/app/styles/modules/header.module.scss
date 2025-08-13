@@ -1,0 +1,45 @@
+@mixin header_child_mixin($left_align: false, $clickable: true){
+    @if ($left_align){
+        margin-right: auto;
+    }
+
+    flex-basis: 20%;
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    @if ($clickable){
+        &:hover{
+            color: #DDDD00;
+            cursor: pointer;
+        }
+        &:active{
+            color: #00AA55;
+        }
+    }
+}
+
+.header_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 160px;
+    background-color: #121212;
+    font-size: 18px;
+}
+
+.header_child_right{
+    @include header_child_mixin($left_align: false);
+}
+
+.header_child_left{
+    @include header_child_mixin($left_align: true);
+}
+
+.header_child_right_not_clickable{
+    @include header_child_mixin($left_align: false, $clickable: false);
+}
+
+.header_child_left_not_clickable{
+    @include header_child_mixin($left_align: true, $clickable: false);
+}
