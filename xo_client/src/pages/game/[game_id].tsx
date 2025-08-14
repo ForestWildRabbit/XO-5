@@ -6,6 +6,7 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import {useEffect} from "react";
 import {useFieldStore} from "@/app/store/FieldStore";
+import {domainName} from "@/app/utils/requests";
 
 export default function Game() {
     const router = useRouter();
@@ -18,7 +19,7 @@ export default function Game() {
             const get_game = async () => {
                 try {
                     console.log(game_id);
-                    const response = await axios.get(`https://localhost/api/game/${game_id}`);
+                    const response = await axios.get(`https://${domainName}/api/game/${game_id}`);
                     const response_data = response.data;
                     updateXPlayer(response_data.x_player);
                     updateOPlayer(response_data.o_player);

@@ -3,6 +3,7 @@ import CellRow from "@/app/components/CellRow";
 import {useEffect} from "react";
 import CustomWebSocket, {reconnect_delay} from "@/app/utils/socket";
 import {useSocketStore} from "@/app/store/SocketStore";
+import {domainName} from "@/app/utils/requests";
 
 const Field = () => {
     const field: string[][] = useFieldStore(state => state.field);
@@ -12,7 +13,7 @@ const Field = () => {
 
     useEffect(() => {
         const gameWebsocket: WebSocket = new CustomWebSocket(
-            `wss://localhost/api/game/connect/${game_id}`, reconnect_delay).get_websocket();
+            `wss://${domainName}/api/game/connect/${game_id}`, reconnect_delay).get_websocket();
         gameWebsocket.onmessage = (event) => {
             if (event.type === 'message') {
                 const response = JSON.parse(event.data);
