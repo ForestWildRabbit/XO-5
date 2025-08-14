@@ -3,6 +3,7 @@ import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react"
 import axios from "axios";
 import form_styles from "@/app/styles/modules/form.module.scss";
 import {validate_create_game} from "@/app/utils/validation";
+import {domainName} from "@/app/utils/requests";
 
 export type Players = {
     x_player: string,
@@ -41,7 +42,7 @@ export default function CreateGame({setModalActive}: CreateGamePropTypes) {
         event.preventDefault();
         if (validate_create_game(players, setFormMessage)){
             try{
-                const response = await axios.post('https://localhost/api/game/',
+                const response = await axios.post(`https://${domainName}/api/game/`,
                     {...players});
                 console.log(response);
 
