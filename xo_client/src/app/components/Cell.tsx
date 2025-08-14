@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {isInWinningSequence, isLastMoveCell} from "@/app/utils/field";
 import {useSocketStore} from "@/app/store/SocketStore";
 import {send_move} from "@/app/utils/requests";
+import {useUserStore} from "@/app/store/UserStore";
 
 type CellPropTypes = {
     row_number: number,
@@ -20,6 +21,9 @@ const Cell = ({row_number, col_number}: CellPropTypes) => {
     const fieldStatus = useFieldStore(state => state.status);
     const winning_sequence = useFieldStore(state => state.winning_sequence);
     const last_move = useFieldStore(state => state.last_move);
+    const x_player = useFieldStore(state => state.x_player);
+    const o_player = useFieldStore(state => state.o_player);
+    const username = useUserStore(state => state.username);
     const websocket = useSocketStore(state => state.socket);
 
     const updateCell = useFieldStore(state => state.updateCell);
@@ -44,14 +48,19 @@ const Cell = ({row_number, col_number}: CellPropTypes) => {
 
     const handleOnClickCell = () => {
         if (field[row_number][col_number] === CellValue.empty && fieldStatus === FieldStatus.started){
-            let val: CellValue;
-            if (move_number % 2 === 0){
+            let val: CellValue = CellValue.empty;
+            if (move_number % 2 === 0 && username === x_player){
                 val = CellValue.x;
-            } else {
+            }
+            if (move_number % 2 === 1 && username === o_player){
                 val = CellValue.o;
             }
-            updateCell(row_number, col_number, val);
-            send_move(websocket, [row_number, col_number, val]);
+
+            if (val){
+                updateCell(row_number, col_number, val);
+                send_move(websocket, [row_number, col_number, val]);
+            }
+
         }
     }
 
