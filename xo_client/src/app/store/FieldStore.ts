@@ -22,9 +22,16 @@ type FieldStore = {
     cols: Readonly<number>,
     status: FieldStatus,
     move_number: number,
+    moves: CellType[],
     winning_sequence: Array<CellType>,
     last_move: CellType | null,
+    x_player: string | null,
+    o_player: string | null,
 
+    updateXPlayer: (player: string) => void,
+    updateOPlayer: (player: string) => void,
+
+    addMove: (move: CellType) => void,
     updateLastMove: (move: CellType) => void,
     updateStatus: (status: FieldStatus) => void,
     updateCell: (row: number, col: number, val: CellValue) => void,
@@ -38,12 +45,16 @@ export const useFieldStore = create<FieldStore>()(set => ({
     cols: cols_count,
     status: FieldStatus.started,
     move_number: 0,
+    moves: [],
     winning_sequence: [],
     last_move: null,
+    x_player: null,
+    o_player: null,
 
     updateCell: (row: number, col: number, val: CellValue) => set(state => {
         state.increaseMoveNumber();
         state.updateLastMove([row, col, val]);
+        state.addMove([row, col, val]);
 
         const field = [...state.field];
         field[row][col] = val;
@@ -55,6 +66,19 @@ export const useFieldStore = create<FieldStore>()(set => ({
         }
 
         return {field: field};
+    }),
+
+    updateXPlayer: (player: string) => set(() => ({
+        x_player: player
+    })),
+
+    updateOPlayer: (player: string) => set(() => ({
+        o_player: player
+    })),
+
+    addMove: (move: CellType) => set(state => {
+        const moves = [...state.moves, move];
+        return {moves: moves}
     }),
 
     updateLastMove: (move: CellType) => set(() => ({

@@ -1,37 +1,33 @@
-import "@/app/styles/globals.scss";
 import {ChangeEvent, Dispatch, FormEvent, SetStateAction, useState} from "react";
-import axios from "axios";
+import {FormMessage} from "@/app/components/CreateGame";
 import form_styles from "@/app/styles/modules/form.module.scss";
-import {validate_create_game} from "@/app/utils/validation";
+import {validate_create_user} from "@/app/utils/validation";
+import {useUserStore} from "@/app/store/UserStore";
 
-export type Players = {
-    x_player: string,
-    o_player: string
+
+export type User = {
+    username: string
 }
 
-export type FormMessage = {
-    message: string;
-    status: 'error' | 'success';
-}
-
-type CreateGamePropTypes = {
+type CreateUserPropTypes = {
     setModalActive: Dispatch<SetStateAction<boolean>>,
 }
 
-export default function CreateGame({setModalActive}: CreateGamePropTypes) {
-    const [players, setPlayers] = useState<Players>({
-        x_player: '',
-        o_player: '',
-    })
+export default function CreateUser({setModalActive}: CreateUserPropTypes) {
+    const [user, setUser] = useState<User>({
+        username: ''
+    });
 
     const [formMessage, setFormMessage] = useState<FormMessage>({
         message: '',
         status: 'success',
     });
 
+    const updateUsername = useUserStore(state => state.updateUsername);
+
     const handleFormChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setPlayers((prev) => ({
+        setUser((prev) => ({
             ...prev,
             [name]: value,
         }))
@@ -39,13 +35,12 @@ export default function CreateGame({setModalActive}: CreateGamePropTypes) {
 
     const handleFormSubmit = async (event: FormEvent)=> {
         event.preventDefault();
-        if (validate_create_game(players, setFormMessage)){
+        if (validate_create_user(user, setFormMessage)){
             try{
-                const response = await axios.post('https://localhost/api/game/',
-                    {...players});
-                console.log(response);
+                updateUsername(user.username);
+                console.log(user);
 
-                setFormMessage({message: 'The game was created', status: 'success'});
+                setFormMessage({message: 'The user was created', status: 'success'});
                 setTimeout(() => setModalActive(false), 2000);
             }
             catch (error) {
@@ -57,23 +52,14 @@ export default function CreateGame({setModalActive}: CreateGamePropTypes) {
 
     return (
         <>
+
             <form onSubmit={handleFormSubmit}>
                 <div>
                     <input
                         type={"text"}
-                        name={"x_player"}
-                        placeholder={"x_player"}
-                        value={players.x_player}
-                        onChange={handleFormChange}
-                        className={form_styles.create_game_input}
-                    />
-                </div>
-                <div>
-                    <input
-                        type={"text"}
-                        name={"o_player"}
-                        placeholder={"o_player"}
-                        value={players.o_player}
+                        name={"username"}
+                        placeholder={"username"}
+                        value={user.username}
                         onChange={handleFormChange}
                         className={form_styles.create_game_input}
                     />
