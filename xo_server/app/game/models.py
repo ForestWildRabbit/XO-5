@@ -5,10 +5,10 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 
 class GameModel(Base):
-    __tablename__ = 'game'
+    __tablename__ = 'games'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    x_player: Mapped[int] = mapped_column(String, default='')
-    o_player: Mapped[int] = mapped_column(String, default='')
+    x_player: Mapped[str] = mapped_column(String, default='')
+    o_player: Mapped[str] = mapped_column(String, default='')
     moves_number: Mapped[int] = mapped_column(default=0)
     is_finished: Mapped[bool] = mapped_column(default=False)
