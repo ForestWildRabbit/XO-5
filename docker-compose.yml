@@ -19,6 +19,7 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
       - DB_PORT=${DB_PORT}
+      - SECRET_KEY=${SECRET_KEY}
     ports:
       - '8000'
     depends_on:

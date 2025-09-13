@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from app.db.models import Base
 from app.core.config import DB_URL
 from app.game.models import GameModel
+from app.user.models import UserModel
 
 from alembic import context
 
